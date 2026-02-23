@@ -1,5 +1,3 @@
-//project minmax
-
 package main
 
 import (
@@ -10,11 +8,13 @@ import (
 	"strings"
 )
 
+
 func getInput() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	return scanner.Text()
 }
+
 
 func minmax(min, max float64, values ...float64) []float64 {
 	var result []float64
@@ -29,26 +29,41 @@ func minmax(min, max float64, values ...float64) []float64 {
 }
 
 func main() {
-
-	fmt.Print("Ingresa el valor mínimo: ")
+	
+	fmt.Print("Enter the minimum value: ")
 	minStr := getInput()
-	min, _ := strconv.ParseFloat(minStr, 64)
+	min, err := strconv.ParseFloat(minStr, 64)
+	if err != nil {
+    	fmt.Println("Invalid minimum value")
+    	return
+	}
 
-	fmt.Print("Ingresa el valor máximo: ")
+	
+	fmt.Print("Enter the maximum value: ")
 	maxStr := getInput()
-	max, _ := strconv.ParseFloat(maxStr, 64)
-
-	fmt.Print("Ingresa los valores separados por espacio: ")
+	max, err := strconv.ParseFloat(maxStr, 64)
+	if err != nil {
+    	fmt.Println("Invalid maximum value")
+    	return
+	}
+	
+	fmt.Print("Enter the values separated by spaces: ")
 	listStr := getInput()
-
+	
 	strFields := strings.Fields(listStr)
 	var floatValues []float64
 	for _, s := range strFields {
-		f, _ := strconv.ParseFloat(s, 64)
+		f, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+    	fmt.Println("values entered for invalid spaces")
+    	return
+	}
 		floatValues = append(floatValues, f)
 	}
 
+	
 	filtered := minmax(min, max, floatValues...)
 
+	
 	fmt.Printf("Resultado: %v\n", filtered)
 }
