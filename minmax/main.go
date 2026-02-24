@@ -46,6 +46,11 @@ func main() {
     	fmt.Println("Invalid maximum value")
     	return
 	}
+
+	if max <= min {
+        fmt.Printf("Error, the maximun value must be grater than the minimum value entered")
+        return 
+    }
 	
 	fmt.Print("Enter the values separated by spaces: ")
 	listStr := getInput()
@@ -55,8 +60,8 @@ func main() {
 	for _, s := range strFields {
 		f, err := strconv.ParseFloat(s, 64)
 		if err != nil {
-    	fmt.Println("values entered for invalid spaces")
-    	return
+    	fmt.Println("invalid ungresed values")
+    	continue
 	}
 		floatValues = append(floatValues, f)
 	}
