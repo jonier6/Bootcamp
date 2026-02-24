@@ -18,7 +18,7 @@ func GetInput() []string {
 		texto := scanner.Text()
 		
 		
-		if strings.TrimSpace(strings.ToLower(texto)) == "exit" {
+		if strings.EqualFold(strings.TrimSpace(texto), "exit") {
 			break
 		}
 		lineas = append(lineas, texto)
