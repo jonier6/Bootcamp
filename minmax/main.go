@@ -17,7 +17,7 @@ func getInput() string {
 
 
 func minmax(min, max float64, values ...float64) []float64 {
-	var result []float64
+	result := []float64{}
 
 	for _, v := range values {
 		if v >= min && v <= max {
@@ -30,24 +30,39 @@ func minmax(min, max float64, values ...float64) []float64 {
 
 func main() {
 	
-	fmt.Print("Ingresa el valor mínimo: ")
+	fmt.Print("Enter the minimum value: ")
 	minStr := getInput()
-	min, _ := strconv.ParseFloat(minStr, 64)
+	min, err := strconv.ParseFloat(minStr, 64)
+	if err != nil {
+    	fmt.Println("Invalid minimum value")
+    	return
+	}
 
 	
-	fmt.Print("Ingresa el valor máximo: ")
+	fmt.Print("Enter the maximum value: ")
 	maxStr := getInput()
-	max, _ := strconv.ParseFloat(maxStr, 64)
+	max, err := strconv.ParseFloat(maxStr, 64)
+	if err != nil {
+    	fmt.Println("Invalid maximum value")
+    	return
+	}
 
+	if max <= min {
+        fmt.Printf("Error, the maximun value must be grater than the minimum value entered")
+        return 
+    }
 	
-	fmt.Print("Ingresa los valores separados por espacio: ")
+	fmt.Print("Enter the values separated by spaces: ")
 	listStr := getInput()
-	
 	
 	strFields := strings.Fields(listStr)
 	var floatValues []float64
 	for _, s := range strFields {
-		f, _ := strconv.ParseFloat(s, 64)
+		f, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+    	fmt.Println("invalid ungresed values")
+    	continue
+	}
 		floatValues = append(floatValues, f)
 	}
 
