@@ -17,7 +17,7 @@ func getInput() string {
 
 
 func minmax(min, max float64, values ...float64) []float64 {
-	var result []float64
+	result := []float64{}
 
 	for _, v := range values {
 		if v >= min && v <= max {
