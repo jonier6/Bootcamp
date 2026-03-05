@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"flag"
 )
 
 func GetInput(r io.Reader) []string {
@@ -24,12 +25,15 @@ func GetInput(r io.Reader) []string {
 	return lineas
 }
 
-func ProcesarEntrada(datos []string, contarLineas bool) int {
+func ProcesarEntrada(datos []string, contarLineas, contarBytes bool ) int {
 	contador := 0
 
 	for _, linea := range datos {
 		if contarLineas {
 			contador++
+		}else if contarBytes{
+			contador += len([]byte(linea)) + 1
+
 		} else {
 			palabras := strings.Fields(linea)
 			contador += len(palabras)
@@ -43,17 +47,21 @@ func main() {
 
 	fmt.Println("Enter the text (type 'exit' to finish):")
 
-	modoLinea := false
-	if len(os.Args) > 1 && os.Args[1] == "-l" {
-		modoLinea = true
-	}
+	countLines := flag.Bool("l", false, "count lines")
+	countBytes := flag.Bool("b", false, "count bytes")
+	
+	flag.Parse()
 
 	contenido := GetInput(os.Stdin)
 
-	resultado := ProcesarEntrada(contenido, modoLinea)
+	resultado := ProcesarEntrada(contenido, *countLines, *countBytes)
+
 	unidad := "words"
-	if modoLinea {
+
+	if *countLines {
 		unidad = "lines"
+	}else if *countBytes{
+		unidad = "bytes"
 	}
 	fmt.Printf("\nfinal result: %d %s.\n", resultado, unidad)
 }
