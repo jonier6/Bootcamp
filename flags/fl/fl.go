@@ -3,9 +3,9 @@ package fl
 import "os"
 
 type Flag struct {
-	Cmd        string
-	Value       *bool  
-	Description string
+	cmd        string
+	value       *bool  
+	description string
 }
 
 
@@ -18,9 +18,9 @@ func Parse() {
 	for _, arg := range args {
 
 		for i := range Flags {
-			if arg == Flags[i].Cmd {
+			if arg == Flags[i].cmd {
 
-				*Flags[i].Value = true
+				*Flags[i].value = true
 			}
 		}
 	}
@@ -32,9 +32,9 @@ func Bool(cmd string, defaultValue bool, description string) *bool {
 	
 	
 	newFlag := Flag{
-		Cmd:        cmd,
-		Value:       &val, 
-		Description: description,
+		cmd:        cmd,
+		value:       &val, 
+		description: description,
 	}
 	Flags = append(Flags, newFlag)
 
