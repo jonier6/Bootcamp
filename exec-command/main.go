@@ -11,17 +11,21 @@ func main() {
 
 	cmd := exec.Command("tasklist")
 
-	var buffer bytes.Buffer
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
 
-	cmd.Stdout = &buffer
-	cmd.Stderr = &buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 
 	if err != nil {
 		log.Fatalf("error executing command: %s", err)
 	}
-	fmt.Println("Combined output:")
-	fmt.Println(buffer.String())
+	fmt.Println("STDOUT:")
+	fmt.Println(stdout.String())
+
+	fmt.Println("STDERR:")
+	fmt.Println(stderr.String())
 
 }
