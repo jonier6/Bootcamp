@@ -1,22 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
-	"os"
 )
 
 func main() {
 
 	cmd := exec.Command("tasklist")
 
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	
-	err := cmd.Run()
+	output, err := cmd.Output()
 
 	if err != nil {
 		log.Fatalf("error executing command: %s", err)
 	}
+	fmt.Println("Command output:")
+	fmt.Println(string(output))
 
 }
