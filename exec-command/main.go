@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -11,21 +13,19 @@ func main() {
 
 	cmd := exec.Command("tasklist")
 
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
+	var buffer bytes.Buffer
 
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
+	mw := io.MultiWriter(os.Stdout, &buffer)
+
+	cmd.Stdout = mw
+	cmd.Stderr = mw
 
 	err := cmd.Run()
 
 	if err != nil {
 		log.Fatalf("error executing command: %s", err)
 	}
-	fmt.Println("STDOUT:")
-	fmt.Println(stdout.String())
-
-	fmt.Println("STDERR:")
-	fmt.Println(stderr.String())
+	fmt.Println("\nCaptured output:")
+	fmt.Println(buffer.String())
 
 }
