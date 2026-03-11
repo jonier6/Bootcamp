@@ -111,3 +111,22 @@ func TestSaveAndGet(t *testing.T) {
 		}
 	}
 }
+func TestString(t *testing.T) {
+
+	var list List
+
+	list.Add("Task 1")
+	list.Add("Task 2")
+
+	list.Complete(0)
+
+	expected :=
+		"- [X] 0: Task 1\n" +
+			"- [ ] 1: Task 2\n"
+
+	result := list.String()
+
+	if result != expected {
+		t.Errorf("expected:\n%s\ngot:\n%s", expected, result)
+	}
+}

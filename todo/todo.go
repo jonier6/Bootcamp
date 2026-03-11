@@ -86,3 +86,20 @@ func (l *List) Get(filename string) error {
 
 	return nil
 }
+
+func (l List) String() string {
+
+	var result string
+
+	for i, task := range l {
+
+		if task.Done {
+			result += fmt.Sprintf("- [X] %d: %s\n", i, task.Task)
+		} else {
+			result += fmt.Sprintf("- [ ] %d: %s\n", i, task.Task)
+		}
+
+	}
+
+	return result
+}

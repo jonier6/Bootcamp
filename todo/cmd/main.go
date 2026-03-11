@@ -31,18 +31,7 @@ func main() {
 	switch {
 
 	case *listFlag:
-
-		for _, task := range list {
-			if !task.Done {
-				fmt.Printf(
-					"Title: %s, Done: %t, CreatedAt: %s, CompletedAt: %s\n",
-					task.Task,
-					task.Done,
-					task.CreatedAt,
-					task.CompletedAt,
-				)
-			}
-		}
+			fmt.Print(list)
 
 	case *completeFlag != -1:
 
