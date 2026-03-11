@@ -6,7 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -56,8 +55,9 @@ func TestTodoCLI(t *testing.T) {
 	cmdPath := filepath.Join(dir, binName)
 
 	t.Run("AddNewTask", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, strings.Split(task, " ")...)
-		fmt.Println(cmd)
+
+		cmd := exec.Command(cmdPath, "-task", task)
+
 		err := cmd.Run()
 		if err != nil {
 			t.Fatal(err)
@@ -65,17 +65,44 @@ func TestTodoCLI(t *testing.T) {
 	})
 
 	t.Run("ListTasks", func(t *testing.T) {
-		cmd := exec.Command(cmdPath)
-		fmt.Println(cmd)
+
+		cmd := exec.Command(cmdPath, "-list")
+
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		expected := task + "\n"
+		expected := fmt.Sprintf(
+			"Title: %s, Done: %t, CreatedAt: ",
+			task,
+			false,
+		)
 
-		if expected != string(out) {
-			t.Errorf("expected %s, got %s instead", expected, string(out))
+		if !contains(string(out), expected) {
+			t.Errorf("expected output to contain %s, got %s", expected, string(out))
 		}
 	})
+	t.Run("CompleteTask", func(t *testing.T) {
+
+		cmd := exec.Command(cmdPath, "-complete", "0")
+
+		err := cmd.Run()
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+	t.Run("DeleteTask", func(t *testing.T) {
+
+		cmd := exec.Command(cmdPath, "-delete", "0")
+
+		err := cmd.Run()
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+}
+
+func contains(output string, expected string) bool {
+	return len(output) >= len(expected) && output[:len(expected)] == expected
 }

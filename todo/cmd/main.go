@@ -1,11 +1,9 @@
-//To add tasks, use the command = go run main.go + task name
-//To get task, use the command = go run main.go
 package main
 
 import (
 	"fmt"
 	"os"
-	"strings"
+	"flag"
 	"todo"
 )
 
@@ -13,36 +11,72 @@ const fileName = ".todo.json"
 
 func main() {
 
+	listFlag := flag.Bool("list", false, "list tasks")
+	taskFlag := flag.String("task", "", "add task")
+	completeFlag := flag.Int("complete", -1, "complete task")
+	deleteFlag := flag.Int("delete", -1, "delete task")
+
+	flag.Parse()
+
 	var list todo.List
 
 	
 	err := list.Get(fileName)
 	if err != nil && !os.IsNotExist(err) {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	
-	args := os.Args[1:]
+	switch {
 
-	
-	if len(args) > 0 {
+	case *listFlag:
 
-		task := strings.Join(args, " ")
+		for _, task := range list {
+			if !task.Done {
+				fmt.Printf(
+					"Title: %s, Done: %t, CreatedAt: %s, CompletedAt: %s\n",
+					task.Task,
+					task.Done,
+					task.CreatedAt,
+					task.CompletedAt,
+				)
+			}
+		}
 
-		list.Add(task)
+	case *completeFlag != -1:
 
-		err := list.Save(fileName)
+		err := list.Complete(*completeFlag)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		return
-	}
+		list.Save(fileName)
 
-	
-	for _, item := range list {
-		fmt.Println(item.Task)
+	case *deleteFlag != -1:
+
+		err := list.Delete(*deleteFlag)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		list.Save(fileName)
+
+	case *taskFlag != "":
+
+		list.Add(*taskFlag)
+
+		err := list.Save(fileName)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+	default:
+
+		fmt.Println("error: no command provided")
+		os.Exit(1)
 	}
 }
